@@ -6,7 +6,7 @@ MEGATRON_PATH=$( dirname $( dirname ${CURRENT_DIR}))
 export PYTHONPATH=${MEGATRON_PATH}:${MEGATRON_PATH}/PAI-Megatron-LM-240718:$PYTHONPATH
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-
+export LD_LIBRARY_PATH=/opt/hpcx/ucx/lib:$LD_LIBRARY_PATH
 # Here are some configs controled by env
 if [ -z ${MP_DATASET_TYPE} ];then
     MP_DATASET_TYPE="idxmap"
@@ -17,12 +17,12 @@ if [ -z ${MP_AC_LAYERS} ];then
 fi
 
 if [ $ENV = dsw ]; then
-    export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+    export CUDA_VISIBLE_DEVICES=0
     MASTER_ADDR=localhost
     MASTER_PORT=$(shuf -n 1 -i 10000-65535)
     NNODES=1
     NODE_RANK=0
-    GPUS_PER_NODE=8
+    GPUS_PER_NODE=1
 elif [ $ENV = dlc ]; then
     NNODES=${WORLD_SIZE}
     NODE_RANK=${RANK}
